@@ -28,7 +28,7 @@
 
 ## 汇编
 
-### pushq将<font color = red>%rbx</font>的内容压入栈
+### pushq将内容压入栈
 
 ### %rax返回值，%rbx，%rbp被调用者保存（p调用q，其中这些寄存器的值<font color=red>不变</font>），%r10、%r11调用者保存(任意函数均可更改)
 
@@ -78,8 +78,28 @@ movq %rsp %rbp
 
 
 movq %rbp, %rsp
-pop %rbp (恢复rbp，%rsp，释放掉局部变量)
+pop %rbp (栈的值给%rbp，恢复rbp，%rsp + 8，释放掉局部变量)
 ```
 
 
 
+# 第四章（基于Y86-64，小端，低位在低地址）
+
+## 指令：1字节：指令表示（低四位0x0 - 0xB,高四位0， 或opq、jxx、cmovxx），1字节源寄存、目标寄存，8字节偏移值/内存地址/立即数
+
+## 读取指令时会对地址有最大地址限制，超过会ADR状态，非法指令，INS,AOK,正常，HLT，遇到halt指令
+
+## <font color=red>push %rA</font>将元素放入%rA中的值读入%rsp - 8，之后更新%rsp；<font color=red>pop %rA</font>，先将内存中元素存入%rA，之后%rsp加8；<font color=red>ret与call</font>对于call指令还要将valp（下一条指令的地址）的值压入栈中，遇到ret将valm（从栈中得的值）给到PC，同时增加%rsp的值
+
+## 一位信号Cnd，在更新PC前会检测，如果为1会跳转valC，不然就执行下一条指令
+
+## 处理器执行过程
+
++ 读取：指令并解析是哪些指令，指令用的寄存器，指令偏移，设置下一条指令地址valp
++ 译码：读取相应的寄存器值
++ 执行：各种计算
++ 访存：将数据从内存读出，读的值为valM（ret用）或将数据写回内存
++ 写回：最多将两个结果写回内存valE写回计算的值，valM写回从数据内存中的值
++ 更新PC：使用valP或call的valc或栈中的valM
+
+## 处理器采用流水线的形式同时执行不同指令，当出现分支，分支判断结果还没计算出来，使用分支预测的方式执行，预测错误回滚，所以ifelse会拖慢程序运行，减少ifelse使用
