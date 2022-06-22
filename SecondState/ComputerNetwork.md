@@ -136,3 +136,8 @@
 ![CDN1](Picture\CDN1.png)
 
 ![CDN2](Picture\CDN2.png)
+
+# 第三章
+
+## UDP绑定自身IP，端口标识一个socket， UDP不同来源发送IP，端口的一个socket再发给同一个应用；一个TCP用过源IP,源端口，目标IP，目标端口标识一个socket，可以通过源IP，源端口号不同发给不同的socket，发给不同应用进程
+
