@@ -103,3 +103,27 @@ pop %rbp (栈的值给%rbp，恢复rbp，%rsp + 8，释放掉局部变量)
 + 更新PC：使用valP或call的valc或栈中的valM
 
 ## 处理器采用流水线的形式同时执行不同指令，当出现分支，分支判断结果还没计算出来，使用分支预测的方式执行，预测错误回滚，所以ifelse会拖慢程序运行，减少ifelse使用
+
+# 第七章链接
+
+## 链接的工作
+
++ 符号（变量和函数）解析：将符号引用（使用函数）与符号的定义相连接
+
++ 重定位：将模块连在一起（merge），必须知道每个变量，函数的地址，将相对地址（虚拟地址）改变为绝对地址
+
+executable：a.out，shared object file：.so
+
+## Linker  Symbols
+
++ Global symbols, defined by module m
++ External symbols,are referenced by module m but defined by other modules
++ defined and referedced exclusively by module m:static function  static variable， not the local program variables 
+
+## strong symbol：初始化的全局以及函数， weak symbol：未初始化的全局
+
+### Multiple strong symbols are not allowed，error
+
+### a strong symbol and multiple weak symbols choose the strong symbol
+
+  
